@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/Solution Items/" />
+  <Folder Name="/Solution Items/build/">
+    <File Path=".gitlab-ci.yml" />
+    <File Path="Directory.Build.props" />
+  </Folder>
+  <Folder Name="/Solution Items/config/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="CodeMaid.config" />
+    <File Path="nuget.config" />
+  </Folder>
+  <Folder Name="/Solution Items/docs/">
+    <File Path="CHANGELOG.md" />
+    <File Path="LICENSE.txt" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/LinkMobility/LinkMobility.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/LinkMobility.Tests/LinkMobility.Tests.csproj" />
+  </Folder>
+</Solution>
