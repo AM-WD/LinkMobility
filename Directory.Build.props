@@ -1,0 +1,46 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>14.0</LangVersion>
+    <NrtRevisionFormat>{semvertag:main}{!:-dev}</NrtRevisionFormat>
+
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/AM-WD/LinkMobility.git</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <Title>LinkMobility API</Title>
+    <Company>AM.WD</Company>
+    <Authors>Andreas Müller</Authors>
+    <Copyright>© {copyright:2025-} AM.WD</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITLAB_CI)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(GITLAB_CI)' == 'true'">
+    <SourceLinkGitLabHost Include="$(CI_SERVER_HOST)" Version="$(CI_SERVER_VERSION)" />
+    <PackageReference Include="Microsoft.SourceLink.GitLab" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AMWD.NetRevisionTask" Version="1.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Newtonsoft.Json"/>
+    <Using Include="System"/>
+    <Using Include="System.Collections.Generic"/>
+  </ItemGroup>
+
+</Project>
