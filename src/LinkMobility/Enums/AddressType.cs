@@ -7,7 +7,7 @@ namespace AMWD.Net.Api.LinkMobility
 	/// Specifies the type of sender address.
 	/// </summary>
 	[JsonConverter(typeof(StringEnumConverter))]
-	public enum SenderAddressType
+	public enum AddressType
 	{
 		/// <summary>
 		/// National number.

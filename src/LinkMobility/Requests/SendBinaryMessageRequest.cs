@@ -3,16 +3,14 @@
 	/// <summary>
 	/// Request to send a text message to a list of recipients.
 	/// </summary>
-	public class SendTextMessageRequest
+	public class SendBinaryMessageRequest
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SendTextMessageRequest"/> class.
+		/// Initializes a new instance of the <see cref="SendBinaryMessageRequest"/> class.
 		/// </summary>
-		/// <param name="messageContent">The message.</param>
 		/// <param name="recipientAddressList">The recipient list.</param>
-		public SendTextMessageRequest(string messageContent, IReadOnlyCollection<string> recipientAddressList)
+		public SendBinaryMessageRequest(IReadOnlyCollection<string> recipientAddressList)
 		{
-			MessageContent = messageContent;
 			RecipientAddressList = recipientAddressList;
 		}
 
@@ -36,33 +34,14 @@
 
 		/// <summary>
 		/// <em>Optional</em>.
-		/// Specifies the maximum number of SMS to be generated.
+		/// Array of <c>Base64</c> encoded binary data.
 		/// </summary>
 		/// <remarks>
-		/// If the system generates more than this number of SMS, the status code <see cref="StatusCodes.MaxSmsPerMessageExceeded"/> is returned.
-		/// The default value of this parameter is <c>0</c>.
-		/// If set to <c>0</c>, no limitation is applied.
+		/// Every element of the array corresponds to a message segment.
+		/// The binary data is transmitted without being changed (using 8 bit alphabet).
 		/// </remarks>
-		[JsonProperty("maxSmsPerMessage")]
-		public int? MaxSmsPerMessage { get; set; }
-
-		/// <summary>
-		/// <em>UTF-8</em> encoded message content.
-		/// </summary>
 		[JsonProperty("messageContent")]
-		public string MessageContent { get; set; }
-
-		/// <summary>
-		/// <em>Optional</em>.
-		/// Specifies the message type.
-		/// </summary>
-		/// <remarks>
-		/// Allowed values are <see cref="MessageType.Default"/> and <see cref="MessageType.Voice"/>.
-		/// When using the message type <see cref="MessageType.Default"/>, the outgoing message type is determined based on account settings.
-		/// Using the message type <see cref="MessageType.Voice"/> triggers a voice call.
-		/// </remarks>
-		[JsonProperty("messageType")]
-		public MessageType? MessageType { get; set; }
+		public IReadOnlyCollection<string>? MessageContent { get; set; }
 
 		/// <summary>
 		/// <em>Optional</em>.
@@ -125,6 +104,16 @@
 		/// </summary>
 		[JsonProperty("test")]
 		public bool? Test { get; set; }
+
+		/// <summary>
+		/// <em>Optional</em>.
+		/// <br/>
+		/// <see langword="true"/>: Indicates the presence of a user data header in the <see cref="MessageContent"/> property.
+		/// <br/>
+		/// <see langword="false"/>: Indicates the absence of a user data header in the <see cref="MessageContent"/> property. (default)
+		/// </summary>
+		[JsonProperty("userDataHeaderPresent")]
+		public bool? UserDataHeaderPresent { get; set; }
 
 		/// <summary>
 		/// <em>Optional</em>.

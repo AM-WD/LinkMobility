@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Custom status codes as defined by <see href="https://developer.linkmobility.eu/sms-api/rest-api#section/Status-codes">Link Mobility</see>.
 	/// </summary>
-	public enum StatusCodes
+	public enum StatusCodes : int
 	{
 		/// <summary>
 		/// Request accepted, Message(s) sent.

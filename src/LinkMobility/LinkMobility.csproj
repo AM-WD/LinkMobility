@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
 
     <PackageId>AMWD.Net.Api.LinkMobility</PackageId>
-    <PackageTags>link mobility api</PackageTags>
+    <PackageTags>link mobility api messaging sms</PackageTags>
 
     <AssemblyName>amwd-linkmobility</AssemblyName>
     <RootNamespace>AMWD.Net.Api.LinkMobility</RootNamespace>
@@ -18,8 +18,8 @@
     <PackageIcon>package-icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
 
-    <Product>LinkMobility API</Product>
-    <Description>Implementation of the Link Mobility REST API</Description>
+    <Product>LINK Mobility REST API</Product>
+    <Description>Implementation of the LINK Mobility REST API using .NET</Description>
 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>

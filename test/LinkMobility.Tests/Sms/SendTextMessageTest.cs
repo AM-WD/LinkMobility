@@ -6,11 +6,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AMWD.Net.Api.LinkMobility;
-using AMWD.Net.Api.LinkMobility.Requests;
 using LinkMobility.Tests.Helpers;
 using Moq.Protected;
 
-namespace LinkMobility.Tests
+namespace LinkMobility.Tests.Sms
 {
 	[TestClass]
 	public class SendTextMessageTest
@@ -43,7 +42,7 @@ namespace LinkMobility.Tests
 			_clientOptionsMock.Setup(c => c.AllowRedirects).Returns(true);
 			_clientOptionsMock.Setup(c => c.UseProxy).Returns(false);
 
-			_request = new SendTextMessageRequest("Happy Testing", ["4791234567"]);
+			_request = new SendTextMessageRequest("example message content", ["436991234567"]);
 		}
 
 		[TestMethod]
@@ -53,7 +52,7 @@ namespace LinkMobility.Tests
 			_httpMessageHandlerMock.Responses.Enqueue(new HttpResponseMessage
 			{
 				StatusCode = HttpStatusCode.OK,
-				Content = new StringContent("{}", Encoding.UTF8, "application/json"),
+				Content = new StringContent(@"{ ""clientMessageId"": ""myUniqueId"", ""smsCount"": 1, ""statusCode"": 2000, ""statusMessage"": ""OK"", ""transferId"": ""0059d0b20100a0a8b803"" }", Encoding.UTF8, "application/json"),
 			});
 
 			var client = GetClient();
@@ -64,12 +63,78 @@ namespace LinkMobility.Tests
 			// Assert
 			Assert.IsNotNull(response);
 
+			Assert.AreEqual("myUniqueId", response.ClientMessageId);
+			Assert.AreEqual(1, response.SmsCount);
+			Assert.AreEqual(StatusCodes.Ok, response.StatusCode);
+			Assert.AreEqual("OK", response.StatusMessage);
+			Assert.AreEqual("0059d0b20100a0a8b803", response.TransferId);
+
 			Assert.HasCount(1, _httpMessageHandlerMock.RequestCallbacks);
 
 			var callback = _httpMessageHandlerMock.RequestCallbacks.First();
 			Assert.AreEqual(HttpMethod.Post, callback.HttpMethod);
 			Assert.AreEqual("https://localhost/rest/smsmessaging/text", callback.Url);
-			Assert.AreEqual(@"{""messageContent"":""Happy Testing"",""recipientAddressList"":[""4791234567""]}", callback.Content);
+			Assert.AreEqual(@"{""messageContent"":""example message content"",""recipientAddressList"":[""436991234567""]}", callback.Content);
+
+			Assert.HasCount(3, callback.Headers);
+			Assert.IsTrue(callback.Headers.ContainsKey("Accept"));
+			Assert.IsTrue(callback.Headers.ContainsKey("Authorization"));
+			Assert.IsTrue(callback.Headers.ContainsKey("User-Agent"));
+
+			Assert.AreEqual("application/json", callback.Headers["Accept"]);
+			Assert.AreEqual("Scheme Parameter", callback.Headers["Authorization"]);
+			Assert.AreEqual("LinkMobilityClient/1.0.0", callback.Headers["User-Agent"]);
+
+			_httpMessageHandlerMock.Mock
+				.Protected()
+				.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+
+			_clientOptionsMock.VerifyGet(o => o.DefaultQueryParams, Times.Once);
+			VerifyNoOtherCalls();
+		}
+
+		[TestMethod]
+		public async Task ShouldSendTextMessageFullDetails()
+		{
+			// Arrange
+			_request.ClientMessageId = "myCustomId";
+			_request.ContentCategory = ContentCategory.Informational;
+			_request.MaxSmsPerMessage = 1;
+			_request.MessageType = MessageType.Voice;
+			_request.NotificationCallbackUrl = "https://user:pass@example.com/callback/";
+			_request.Priority = 5;
+			_request.SendAsFlashSms = false;
+			_request.SenderAddress = "4369912345678";
+			_request.SenderAddressType = AddressType.International;
+			_request.Test = false;
+			_request.ValidityPeriode = 300;
+
+			_httpMessageHandlerMock.Responses.Enqueue(new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StringContent(@"{ ""clientMessageId"": ""myCustomId"", ""smsCount"": 1, ""statusCode"": 4035, ""statusMessage"": ""SMS_DISABLED"", ""transferId"": ""0059d0b20100a0a8b803"" }", Encoding.UTF8, "application/json"),
+			});
+
+			var client = GetClient();
+
+			// Act
+			var response = await client.SendTextMessage(_request, TestContext.CancellationToken);
+
+			// Assert
+			Assert.IsNotNull(response);
+
+			Assert.AreEqual("myCustomId", response.ClientMessageId);
+			Assert.AreEqual(1, response.SmsCount);
+			Assert.AreEqual(StatusCodes.SmsDisabled, response.StatusCode);
+			Assert.AreEqual("SMS_DISABLED", response.StatusMessage);
+			Assert.AreEqual("0059d0b20100a0a8b803", response.TransferId);
+
+			Assert.HasCount(1, _httpMessageHandlerMock.RequestCallbacks);
+
+			var callback = _httpMessageHandlerMock.RequestCallbacks.First();
+			Assert.AreEqual(HttpMethod.Post, callback.HttpMethod);
+			Assert.AreEqual("https://localhost/rest/smsmessaging/text", callback.Url);
+			Assert.AreEqual(@"{""clientMessageId"":""myCustomId"",""contentCategory"":""informational"",""maxSmsPerMessage"":1,""messageContent"":""example message content"",""messageType"":""voice"",""notificationCallbackUrl"":""https://user:pass@example.com/callback/"",""priority"":5,""recipientAddressList"":[""436991234567""],""sendAsFlashSms"":false,""senderAddress"":""4369912345678"",""senderAddressType"":""international"",""test"":false,""validityPeriode"":300}", callback.Content);
 
 			Assert.HasCount(3, callback.Headers);
 			Assert.IsTrue(callback.Headers.ContainsKey("Accept"));
@@ -172,11 +237,6 @@ namespace LinkMobility.Tests
 			httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("LinkMobilityClient", "1.0.0"));
 			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-			if (_clientOptionsMock.Object.DefaultHeaders.Count > 0)
-			{
-				foreach (var headerKvp in _clientOptionsMock.Object.DefaultHeaders)
-					httpClient.DefaultRequestHeaders.Add(headerKvp.Key, headerKvp.Value);
-			}
 			_authenticationMock.Object.AddHeader(httpClient);
 
 			_authenticationMock.Invocations.Clear();

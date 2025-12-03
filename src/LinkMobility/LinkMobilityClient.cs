@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,13 +15,6 @@ namespace AMWD.Net.Api.LinkMobility
 	/// </summary>
 	public partial class LinkMobilityClient : ILinkMobilityClient, IDisposable
 	{
-		private static readonly JsonSerializerSettings _jsonSerializerSettings = new()
-		{
-			Culture = CultureInfo.InvariantCulture,
-			Formatting = Formatting.None,
-			NullValueHandling = NullValueHandling.Ignore
-		};
-
 		private readonly ClientOptions _clientOptions;
 		private readonly HttpClient _httpClient;
 
@@ -191,7 +183,7 @@ namespace AMWD.Net.Api.LinkMobility
 			if (request is HttpContent httpContent)
 				return httpContent;
 
-			string json = JsonConvert.SerializeObject(request, _jsonSerializerSettings);
+			string json = request.SerializeObject();
 			return new StringContent(json, Encoding.UTF8, "application/json");
 		}
 
@@ -208,7 +200,7 @@ namespace AMWD.Net.Api.LinkMobility
 				HttpStatusCode.Unauthorized => throw new AuthenticationException($"HTTP auth missing: {httpResponse.StatusCode}"),
 				HttpStatusCode.Forbidden => throw new AuthenticationException($"HTTP auth missing: {httpResponse.StatusCode}"),
 				HttpStatusCode.OK =>
-					JsonConvert.DeserializeObject<TResponse>(content, _jsonSerializerSettings)
+					content.DeserializeObject<TResponse>()
 						?? throw new ApplicationException("Response could not be deserialized"),
 				_ => throw new ApplicationException($"Unknown HTTP response: {httpResponse.StatusCode}"),
 			};

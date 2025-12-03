@@ -1,12 +1,12 @@
-# LinkMobility API
+# LINK Mobility REST API
 
-This project aims to implement the [LinkMobility REST API].
+This project aims to implement the [LINK Mobility REST API].
 
 ## Overview
 
-Link Mobility is a provider for communication with customers via SMS, RCS or WhatsApp.
+LINK Mobility is a provider for communication with customers via SMS, RCS or WhatsApp.
 
-With this project the REST API of Link Mobility will be implemented.
+In this project the REST API of LINK Mobility will be implemented.
 
 - [SMS API](https://developer.linkmobility.eu/sms-api/rest-api)
 
@@ -14,5 +14,5 @@ With this project the REST API of Link Mobility will be implemented.
 
 Published under MIT License (see [**tl;dr**Legal])
 
-[LinkMobility REST API]: https://developer.linkmobility.eu/
+[LINK Mobility REST API]: https://developer.linkmobility.eu/
 [**tl;dr**Legal]: https://www.tldrlegal.com/license/mit-license

@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Response of a text message sent to a list of recipients.
 	/// </summary>
-	public class SendTextMessageResponse
+	public class SendMessageResponse
 	{
 		/// <summary>
 		/// Contains the message id defined in the request.
