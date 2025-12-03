@@ -16,7 +16,9 @@
     <EmbedUntrackedSources>false</EmbedUntrackedSources>
 
     <PackageIcon>package-icon.png</PackageIcon>
+    <PackageProjectUrl>https://developer.linkmobility.eu/</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 
     <Product>LINK Mobility REST API</Product>
     <Description>Implementation of the LINK Mobility REST API using .NET</Description>

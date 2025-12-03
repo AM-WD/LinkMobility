@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+_No changes yet_
 
 
+## [v0.1.0] - 2025-12-03
+
+_Initial release, SMS only._
 
 ### Added
 
@@ -21,4 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-[Unreleased]: https://github.com/AM-WD/LinkMobility
+[Unreleased]: https://github.com/AM-WD/LinkMobility/compare/v0.1.0...HEAD
+
+[v0.1.0]: https://github.com/AM-WD/LinkMobility/commits/v0.1.0

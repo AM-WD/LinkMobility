@@ -14,7 +14,6 @@
     <Company>AM.WD</Company>
     <Authors>Andreas Müller</Authors>
     <Copyright>© {copyright:2025-} AM.WD</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITLAB_CI)' == 'true'">
