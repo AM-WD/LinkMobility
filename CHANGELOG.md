@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+_No changes yet_
+
+## [v0.1.1] - 2026-03-13
+
 ### Added
 
 - Added optional parameter to inject your own `HttpClient`
@@ -31,6 +35,7 @@ _Initial release, SMS only._
 
 
 
-[Unreleased]: https://github.com/AM-WD/LinkMobility/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/AM-WD/LinkMobility/compare/v0.1.1...HEAD
 
+[v0.1.1]: https://github.com/AM-WD/LinkMobility/compare/v0.1.0...v0.1.1
 [v0.1.0]: https://github.com/AM-WD/LinkMobility/commits/v0.1.0
