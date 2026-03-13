@@ -58,13 +58,3 @@ jobs:
         run: |
           set -ex
           dotnet nuget push -k "${{ secrets.NUGET_APIKEY }}" -s "https://api.nuget.org/v3/index.json" --skip-duplicate /artifacts/*.nupkg
-
-      - name: Publish documentation
-        env:
-          DOCFX_SOURCE_REPOSITORY_URL: 'https://github.com/AM-WD/LinkMobility'
-        run: |
-          set -ex
-          /dotnet-tools/docfx metadata docs/docfx.json
-          /dotnet-tools/docfx build docs/docfx.json
-          tar -C "${{ gitea.workspace }}/docs/_site" -czf "/artifacts/docs.tar.gz" .
-          curl -sSL --no-progress-meter --user "${{ secrets.DOCS_DEPLOY_USER }}:${{ secrets.DOCS_DEPLOY_PASS }}" -F docs=linkmobility -F dump=@/artifacts/docs.tar.gz "${{ vars.DOCS_DEPLOY_URL }}"
