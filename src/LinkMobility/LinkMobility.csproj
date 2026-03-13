@@ -10,10 +10,10 @@
     <AssemblyName>amwd-linkmobility</AssemblyName>
     <RootNamespace>AMWD.Net.Api.LinkMobility</RootNamespace>
 
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <EmbedUntrackedSources>false</EmbedUntrackedSources>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <PackageIcon>package-icon.png</PackageIcon>
     <PackageProjectUrl>https://developer.linkmobility.eu/</PackageProjectUrl>
@@ -22,8 +22,6 @@
 
     <Product>LINK Mobility REST API</Product>
     <Description>Implementation of the LINK Mobility REST API using .NET</Description>
-
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
