@@ -40,6 +40,6 @@ namespace AMWD.Net.Api.LinkMobility
 		/// <summary>
 		/// Gets or sets the proxy information.
 		/// </summary>
-		public virtual IWebProxy Proxy { get; set; }
+		public virtual IWebProxy? Proxy { get; set; }
 	}
 }

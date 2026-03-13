@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added optional parameter to inject your own `HttpClient`
+
 ### Changed
 
 - Migrated main repository from Gitlab to Gitea

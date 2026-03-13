@@ -7,6 +7,7 @@
 	{
 		/// <summary>
 		/// Retrieves the query parameters.
+		/// </summary>
 		IReadOnlyDictionary<string, string> GetQueryParameters();
 	}
 }

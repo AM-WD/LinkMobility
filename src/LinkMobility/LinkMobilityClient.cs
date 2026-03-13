@@ -26,8 +26,9 @@ namespace AMWD.Net.Api.LinkMobility
 		/// <param name="username">The username used for basic authentication.</param>
 		/// <param name="password">The password used for basic authentication.</param>
 		/// <param name="clientOptions">Optional configuration settings for the client.</param>
-		public LinkMobilityClient(string username, string password, ClientOptions? clientOptions = null)
-			: this(new BasicAuthentication(username, password), clientOptions)
+		/// <param name="httpClient">Optional <see cref="HttpClient"/> instance if you want a custom <see cref="HttpMessageHandler"/> implemented.</param>
+		public LinkMobilityClient(string username, string password, ClientOptions? clientOptions = null, HttpClient? httpClient = null)
+			: this(new BasicAuthentication(username, password), clientOptions, httpClient)
 		{
 		}
 
@@ -36,8 +37,9 @@ namespace AMWD.Net.Api.LinkMobility
 		/// </summary>
 		/// <param name="token">The bearer token used for authentication.</param>
 		/// <param name="clientOptions">Optional configuration settings for the client.</param>
-		public LinkMobilityClient(string token, ClientOptions? clientOptions = null)
-			: this(new AccessTokenAuthentication(token), clientOptions)
+		/// <param name="httpClient">Optional <see cref="HttpClient"/> instance if you want a custom <see cref="HttpMessageHandler"/> implemented.</param>
+		public LinkMobilityClient(string token, ClientOptions? clientOptions = null, HttpClient? httpClient = null)
+			: this(new AccessTokenAuthentication(token), clientOptions, httpClient)
 		{
 		}
 
@@ -47,7 +49,8 @@ namespace AMWD.Net.Api.LinkMobility
 		/// </summary>
 		/// <param name="authentication">The authentication mechanism used to authorize requests.</param>
 		/// <param name="clientOptions">Optional client configuration settings.</param>
-		public LinkMobilityClient(IAuthentication authentication, ClientOptions? clientOptions = null)
+		/// <param name="httpClient">Optional <see cref="HttpClient"/> instance if you want a custom <see cref="HttpMessageHandler"/> implemented.</param>
+		public LinkMobilityClient(IAuthentication authentication, ClientOptions? clientOptions = null, HttpClient? httpClient = null)
 		{
 			if (authentication == null)
 				throw new ArgumentNullException(nameof(authentication));
@@ -55,7 +58,9 @@ namespace AMWD.Net.Api.LinkMobility
 			_clientOptions = clientOptions ?? new ClientOptions();
 			ValidateClientOptions();
 
-			_httpClient = CreateHttpClient();
+			_httpClient = httpClient ?? CreateHttpClient();
+			ConfigureHttpClient(_httpClient);
+
 			authentication.AddHeader(_httpClient);
 		}
 
@@ -118,24 +123,29 @@ namespace AMWD.Net.Api.LinkMobility
 				};
 			}
 
+			var httpClient = new HttpClient(handler, disposeHandler: true);
+
+			httpClient.DefaultRequestHeaders.UserAgent.Clear();
+			httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(nameof(LinkMobilityClient), version));
+
+			return httpClient;
+		}
+
+		private void ConfigureHttpClient(HttpClient httpClient)
+		{
 			string baseUrl = _clientOptions.BaseUrl.Trim().TrimEnd('/');
 
-			var client = new HttpClient(handler, disposeHandler: true)
-			{
-				BaseAddress = new Uri($"{baseUrl}/"),
-				Timeout = _clientOptions.Timeout
-			};
+			httpClient.BaseAddress = new Uri($"{baseUrl}/");
+			httpClient.Timeout = _clientOptions.Timeout;
 
-			client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(nameof(LinkMobilityClient), version));
-			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			httpClient.DefaultRequestHeaders.Accept.Clear();
+			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
 			if (_clientOptions.DefaultHeaders.Count > 0)
 			{
 				foreach (var headerKvp in _clientOptions.DefaultHeaders)
-					client.DefaultRequestHeaders.Add(headerKvp.Key, headerKvp.Value);
+					httpClient.DefaultRequestHeaders.Add(headerKvp.Key, headerKvp.Value);
 			}
-
-			return client;
 		}
 
 		private async Task<TResponse> PostAsync<TResponse, TRequest>(string requestPath, TRequest? request, IQueryParameter? queryParams = null, CancellationToken cancellationToken = default)
@@ -146,8 +156,16 @@ namespace AMWD.Net.Api.LinkMobility
 			string requestUrl = BuildRequestUrl(requestPath, queryParams);
 			var httpContent = ConvertRequest(request);
 
-			var response = await _httpClient.PostAsync(requestUrl, httpContent, cancellationToken).ConfigureAwait(false);
-			return await GetResponse<TResponse>(response, cancellationToken).ConfigureAwait(false);
+			var httpRequest = new HttpRequestMessage
+			{
+				Method = HttpMethod.Post,
+				RequestUri = new Uri(requestUrl, UriKind.Relative),
+				Content = httpContent,
+			};
+
+			var httpResponse = await _httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
+			var response = await GetResponse<TResponse>(httpResponse, cancellationToken).ConfigureAwait(false);
+			return response;
 		}
 
 		private string BuildRequestUrl(string requestPath, IQueryParameter? queryParams = null)

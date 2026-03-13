@@ -56,6 +56,7 @@ namespace AMWD.Net.Api.LinkMobility
 			return PostAsync<SendMessageResponse, SendBinaryMessageRequest>("/smsmessaging/binary", request, cancellationToken: cancellationToken);
 		}
 
+		// https://en.wikipedia.org/wiki/MSISDN
 		private static bool IsValidMSISDN(string msisdn)
 		{
 			if (string.IsNullOrWhiteSpace(msisdn))
