@@ -13,7 +13,7 @@ namespace AMWD.Net.Api.LinkMobility
 	/// <summary>
 	/// Provides a client for interacting with the Link Mobility API.
 	/// </summary>
-	public partial class LinkMobilityClient : ILinkMobilityClient, IDisposable
+	public class LinkMobilityClient : ILinkMobilityClient, IDisposable
 	{
 		private readonly ClientOptions _clientOptions;
 		private readonly HttpClient _httpClient;
@@ -76,6 +76,52 @@ namespace AMWD.Net.Api.LinkMobility
 
 			_httpClient.Dispose();
 			GC.SuppressFinalize(this);
+		}
+
+		/// <inheritdoc/>
+		public async Task<TResponse> PostAsync<TResponse, TRequest>(string requestPath, TRequest? request, IQueryParameter? queryParams = null, CancellationToken cancellationToken = default)
+		{
+			ThrowIfDisposed();
+			ValidateRequestPath(requestPath);
+
+			string requestUrl = BuildRequestUrl(requestPath, queryParams);
+			var httpContent = ConvertRequest(request);
+
+			var httpRequest = new HttpRequestMessage
+			{
+				Method = HttpMethod.Post,
+				RequestUri = new Uri(requestUrl, UriKind.Relative),
+				Content = httpContent,
+			};
+
+			var httpResponse = await _httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
+			var response = await GetResponse<TResponse>(httpResponse, cancellationToken).ConfigureAwait(false);
+			return response;
+		}
+
+		private string BuildRequestUrl(string requestPath, IQueryParameter? queryParams = null)
+		{
+			string path = requestPath.Trim().TrimStart('/');
+			var param = new Dictionary<string, string>();
+
+			if (_clientOptions.DefaultQueryParams.Count > 0)
+			{
+				foreach (var kvp in _clientOptions.DefaultQueryParams)
+					param[kvp.Key] = kvp.Value;
+			}
+
+			var customQueryParams = queryParams?.GetQueryParameters();
+			if (customQueryParams?.Count > 0)
+			{
+				foreach (var kvp in customQueryParams)
+					param[kvp.Key] = kvp.Value;
+			}
+
+			if (param.Count == 0)
+				return path;
+
+			string queryString = string.Join("&", param.Select(kvp => $"{WebUtility.UrlEncode(kvp.Key)}={WebUtility.UrlEncode(kvp.Value)}"));
+			return $"{path}?{queryString}";
 		}
 
 		private void ValidateClientOptions()
@@ -146,51 +192,6 @@ namespace AMWD.Net.Api.LinkMobility
 				foreach (var headerKvp in _clientOptions.DefaultHeaders)
 					httpClient.DefaultRequestHeaders.Add(headerKvp.Key, headerKvp.Value);
 			}
-		}
-
-		private async Task<TResponse> PostAsync<TResponse, TRequest>(string requestPath, TRequest? request, IQueryParameter? queryParams = null, CancellationToken cancellationToken = default)
-		{
-			ThrowIfDisposed();
-			ValidateRequestPath(requestPath);
-
-			string requestUrl = BuildRequestUrl(requestPath, queryParams);
-			var httpContent = ConvertRequest(request);
-
-			var httpRequest = new HttpRequestMessage
-			{
-				Method = HttpMethod.Post,
-				RequestUri = new Uri(requestUrl, UriKind.Relative),
-				Content = httpContent,
-			};
-
-			var httpResponse = await _httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
-			var response = await GetResponse<TResponse>(httpResponse, cancellationToken).ConfigureAwait(false);
-			return response;
-		}
-
-		private string BuildRequestUrl(string requestPath, IQueryParameter? queryParams = null)
-		{
-			string path = requestPath.Trim().TrimStart('/');
-			var param = new Dictionary<string, string>();
-
-			if (_clientOptions.DefaultQueryParams.Count > 0)
-			{
-				foreach (var kvp in _clientOptions.DefaultQueryParams)
-					param[kvp.Key] = kvp.Value;
-			}
-
-			var customQueryParams = queryParams?.GetQueryParameters();
-			if (customQueryParams?.Count > 0)
-			{
-				foreach (var kvp in customQueryParams)
-					param[kvp.Key] = kvp.Value;
-			}
-
-			if (param.Count == 0)
-				return path;
-
-			string queryString = string.Join("&", param.Select(kvp => $"{WebUtility.UrlEncode(kvp.Key)}={WebUtility.UrlEncode(kvp.Value)}"));
-			return $"{path}?{queryString}";
 		}
 
 		private static HttpContent? ConvertRequest<T>(T request)

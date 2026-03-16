@@ -12,12 +12,6 @@
 		public string? ClientMessageId { get; set; }
 
 		/// <summary>
-		/// The actual number of generated SMS.
-		/// </summary>
-		[JsonProperty("smsCount")]
-		public int? SmsCount { get; set; }
-
-		/// <summary>
 		/// Status code.
 		/// </summary>
 		[JsonProperty("statusCode")]

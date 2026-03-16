@@ -39,6 +39,8 @@ namespace LinkMobility.Tests.Helpers
 		public Queue<HttpResponseMessage> Responses { get; } = new();
 
 		public Mock<HttpClientHandler> Mock { get; }
+
+		public IProtectedMock<HttpClientHandler> Protected => Mock.Protected();
 	}
 
 	internal class HttpRequestMessageCallback

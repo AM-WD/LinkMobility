@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_No changes yet_
+### Added
+
+- `Validation` utility class for specifications as MSISDN
+
+### Changed
+
+- Channel implementations (SMS, WhatsApp, ...) are extensions to the `ILinkMobilityClient` interface.
+
 
 ## [v0.1.1] - 2026-03-13
 

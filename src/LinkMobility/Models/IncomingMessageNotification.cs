@@ -56,7 +56,7 @@ namespace AMWD.Net.Api.LinkMobility
 		/// <summary>
 		/// <see cref="Type.Text"/>, <see cref="Type.Binary"/>:
 		/// <br/>
-		/// <see cref="AddressType.International"/> – defines the number format of the mobile originated <see cref="SenderAddress"/>.
+		/// <see cref="AddressType.International"/> - defines the number format of the mobile originated <see cref="SenderAddress"/>.
 		/// International numbers always includes the country prefix.
 		/// </summary>
 		[JsonProperty("senderAddressType")]

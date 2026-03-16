@@ -145,7 +145,7 @@ namespace LinkMobility.Tests
 			var client = GetClient();
 
 			// Act
-			var response = await ReflectionHelper.InvokePrivateMethodAsync<TestClass>(client, "PostAsync", "test", _request, null, TestContext.CancellationToken);
+			var response = await client.PostAsync<TestClass, TestClass>("test", _request, null, TestContext.CancellationToken);
 
 			// Assert
 			Assert.IsNotNull(response);
@@ -188,7 +188,7 @@ namespace LinkMobility.Tests
 			var client = GetClient();
 
 			// Act
-			var response = await ReflectionHelper.InvokePrivateMethodAsync<TestClass>(client, "PostAsync", "params/path", _request, queryParams, TestContext.CancellationToken);
+			var response = await client.PostAsync<TestClass, TestClass>("params/path", _request, queryParams, TestContext.CancellationToken);
 
 			// Assert
 			Assert.IsNotNull(response);
@@ -256,7 +256,7 @@ namespace LinkMobility.Tests
 		public void ShouldAssertClientOptions()
 		{
 			// Arrange + Act
-			var client = GetClient();
+			_ = GetClient();
 
 			// Assert
 			VerifyNoOtherCalls();
@@ -320,7 +320,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			await Assert.ThrowsExactlyAsync<ObjectDisposedException>(async () =>
 			{
-				await ReflectionHelper.InvokePrivateMethodAsync<object>(client, "PostAsync", "/request/path", _request, null, TestContext.CancellationToken);
+				await client.PostAsync<object, TestClass>("/request/path", _request, null, TestContext.CancellationToken);
 			});
 		}
 
@@ -336,7 +336,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
 			{
-				await ReflectionHelper.InvokePrivateMethodAsync<object>(client, "PostAsync", path, _request, null, TestContext.CancellationToken);
+				await client.PostAsync<object, TestClass>(path, _request, null, TestContext.CancellationToken);
 			});
 		}
 
@@ -349,7 +349,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
 			{
-				await ReflectionHelper.InvokePrivateMethodAsync<object>(client, "PostAsync", "foo?bar=baz", _request, null, TestContext.CancellationToken);
+				await client.PostAsync<object, TestClass>("foo?bar=baz", _request, null, TestContext.CancellationToken);
 			});
 		}
 
@@ -366,7 +366,7 @@ namespace LinkMobility.Tests
 			var client = GetClient();
 
 			// Act
-			var response = await ReflectionHelper.InvokePrivateMethodAsync<TestClass>(client, "PostAsync", "/request/path", _request, null, TestContext.CancellationToken);
+			var response = await client.PostAsync<TestClass, TestClass>("/request/path", _request, null, TestContext.CancellationToken);
 
 			// Assert
 			Assert.IsNotNull(response);
@@ -411,7 +411,7 @@ namespace LinkMobility.Tests
 			var client = GetClient();
 
 			// Act
-			var response = await ReflectionHelper.InvokePrivateMethodAsync<TestClass>(client, "PostAsync", "/request/path", stringContent, null, TestContext.CancellationToken);
+			var response = await client.PostAsync<TestClass, HttpContent>("/request/path", stringContent, null, TestContext.CancellationToken);
 
 			// Assert
 			Assert.IsNotNull(response);
@@ -455,7 +455,7 @@ namespace LinkMobility.Tests
 			var client = GetClient();
 
 			// Act
-			var response = await ReflectionHelper.InvokePrivateMethodAsync<TestClass>(client, "PostAsync", "posting", null, null, TestContext.CancellationToken);
+			var response = await client.PostAsync<TestClass, object>("posting", null, null, TestContext.CancellationToken);
 
 			// Assert
 			Assert.IsNotNull(response);
@@ -501,7 +501,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			var ex = await Assert.ThrowsExactlyAsync<AuthenticationException>(async () =>
 			{
-				await ReflectionHelper.InvokePrivateMethodAsync<object>(client, "PostAsync", "foo", _request, null, TestContext.CancellationToken);
+				await client.PostAsync<object, TestClass>("foo", _request, null, TestContext.CancellationToken);
 			});
 			Assert.IsNull(ex.InnerException);
 			Assert.AreEqual($"HTTP auth missing: {statusCode}", ex.Message);
@@ -524,7 +524,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			var ex = await Assert.ThrowsExactlyAsync<ApplicationException>(async () =>
 			{
-				await ReflectionHelper.InvokePrivateMethodAsync<object>(client, "PostAsync", "foo", _request, null, TestContext.CancellationToken);
+				await client.PostAsync<object, TestClass>("foo", _request, null, TestContext.CancellationToken);
 			});
 			Assert.IsNull(ex.InnerException);
 			Assert.AreEqual($"Unknown HTTP response: {statusCode}", ex.Message);
@@ -545,7 +545,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			await Assert.ThrowsExactlyAsync<JsonReaderException>(async () =>
 			{
-				await ReflectionHelper.InvokePrivateMethodAsync<TestClass>(client, "PostAsync", "some-path", _request, null, TestContext.CancellationToken);
+				await client.PostAsync<TestClass, TestClass>("some-path", _request, null, TestContext.CancellationToken);
 			});
 		}
 
@@ -563,7 +563,7 @@ namespace LinkMobility.Tests
 			var client = GetClient();
 
 			// Act
-			string response = await ReflectionHelper.InvokePrivateMethodAsync<string>(client, "PostAsync", "path", _request, null, TestContext.CancellationToken);
+			string response = await client.PostAsync<string, TestClass>("path", _request, null, TestContext.CancellationToken);
 
 			// Assert
 			Assert.IsNotNull(response);

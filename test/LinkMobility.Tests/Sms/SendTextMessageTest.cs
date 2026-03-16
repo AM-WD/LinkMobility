@@ -85,11 +85,24 @@ namespace LinkMobility.Tests.Sms
 			Assert.AreEqual("Scheme Parameter", callback.Headers["Authorization"]);
 			Assert.AreEqual("LinkMobilityClient/1.0.0", callback.Headers["User-Agent"]);
 
-			_httpMessageHandlerMock.Mock
-				.Protected()
-				.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+			_httpMessageHandlerMock.Protected.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
 
 			_clientOptionsMock.VerifyGet(o => o.DefaultQueryParams, Times.Once);
+			VerifyNoOtherCalls();
+		}
+
+		[TestMethod]
+		public void ShouldThrowOnInvalidContentCategory()
+		{
+			// Arrange
+			_request.ContentCategory = 0;
+			var client = GetClient();
+
+			// Act & Assert
+			var ex = Assert.ThrowsExactly<ArgumentException>(() => client.SendTextMessage(_request, TestContext.CancellationToken));
+			Assert.AreEqual("contentCategory", ex.ParamName);
+			Assert.StartsWith("Content category '0' is not valid.", ex.Message);
+
 			VerifyNoOtherCalls();
 		}
 
@@ -145,9 +158,7 @@ namespace LinkMobility.Tests.Sms
 			Assert.AreEqual("Scheme Parameter", callback.Headers["Authorization"]);
 			Assert.AreEqual("LinkMobilityClient/1.0.0", callback.Headers["User-Agent"]);
 
-			_httpMessageHandlerMock.Mock
-				.Protected()
-				.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+			_httpMessageHandlerMock.Protected.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
 
 			_clientOptionsMock.VerifyGet(o => o.DefaultQueryParams, Times.Once);
 			VerifyNoOtherCalls();
@@ -192,7 +203,7 @@ namespace LinkMobility.Tests.Sms
 
 			// Act & Assert
 			var ex = Assert.ThrowsExactly<ArgumentException>(() => client.SendTextMessage(req, TestContext.CancellationToken));
-			Assert.AreEqual("RecipientAddressList", ex.ParamName);
+			Assert.AreEqual("recipientAddressList", ex.ParamName);
 
 			VerifyNoOtherCalls();
 		}
@@ -211,7 +222,7 @@ namespace LinkMobility.Tests.Sms
 			// Act & Assert
 			var ex = Assert.ThrowsExactly<ArgumentException>(() => client.SendTextMessage(req, TestContext.CancellationToken));
 
-			Assert.AreEqual("RecipientAddressList", ex.ParamName);
+			Assert.AreEqual("recipientAddressList", ex.ParamName);
 			Assert.StartsWith($"Recipient address '{recipient}' is not a valid MSISDN format.", ex.Message);
 
 			VerifyNoOtherCalls();

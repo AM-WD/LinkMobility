@@ -8,8 +8,8 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SendTextMessageRequest"/> class.
 		/// </summary>
-		/// <param name="messageContent">The message.</param>
-		/// <param name="recipientAddressList">The recipient list.</param>
+		/// <param name="messageContent">A text message.</param>
+		/// <param name="recipientAddressList">A list of recipient numbers.</param>
 		public SendTextMessageRequest(string messageContent, IReadOnlyCollection<string> recipientAddressList)
 		{
 			MessageContent = messageContent;

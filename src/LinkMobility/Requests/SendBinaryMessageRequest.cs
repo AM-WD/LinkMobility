@@ -8,9 +8,11 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SendBinaryMessageRequest"/> class.
 		/// </summary>
-		/// <param name="recipientAddressList">The recipient list.</param>
-		public SendBinaryMessageRequest(IReadOnlyCollection<string> recipientAddressList)
+		/// <param name="messageContent">A binary message as base64 encoded lines.</param>
+		/// <param name="recipientAddressList">A list of recipient numbers.</param>
+		public SendBinaryMessageRequest(IReadOnlyCollection<string> messageContent, IReadOnlyCollection<string> recipientAddressList)
 		{
+			MessageContent = messageContent;
 			RecipientAddressList = recipientAddressList;
 		}
 
@@ -41,7 +43,7 @@
 		/// The binary data is transmitted without being changed (using 8 bit alphabet).
 		/// </remarks>
 		[JsonProperty("messageContent")]
-		public IReadOnlyCollection<string>? MessageContent { get; set; }
+		public IReadOnlyCollection<string> MessageContent { get; set; }
 
 		/// <summary>
 		/// <em>Optional</em>.
