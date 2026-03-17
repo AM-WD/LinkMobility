@@ -145,7 +145,7 @@ namespace LinkMobility.Tests
 			var client = GetClient();
 
 			// Act
-			var response = await client.PostAsync<TestClass, TestClass>("test", _request, null, TestContext.CancellationToken);
+			var response = await client.PostAsync<TestClass, TestClass>("test", _request, TestContext.CancellationToken);
 
 			// Assert
 			Assert.IsNotNull(response);
@@ -166,54 +166,9 @@ namespace LinkMobility.Tests
 			Assert.AreEqual("Scheme Parameter", callback.Headers["Authorization"]);
 			Assert.AreEqual("LinkMobilityClient/1.0.0", callback.Headers["User-Agent"]);
 
-			_httpMessageHandlerMock.Mock
-				.Protected()
-				.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+			_httpMessageHandlerMock.Protected.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
 
 			_clientOptionsMock.VerifyGet(o => o.DefaultQueryParams, Times.Exactly(2));
-			VerifyNoOtherCalls();
-		}
-
-		[TestMethod]
-		public async Task ShouldAddCustomQueryParameters()
-		{
-			// Arrange
-			var queryParams = new TestParams();
-			_httpMessageHandlerMock.Responses.Enqueue(new HttpResponseMessage
-			{
-				StatusCode = HttpStatusCode.OK,
-				Content = new StringContent(@"{ ""string"": ""some-string"", ""integer"": 123 }", Encoding.UTF8, "application/json"),
-			});
-
-			var client = GetClient();
-
-			// Act
-			var response = await client.PostAsync<TestClass, TestClass>("params/path", _request, queryParams, TestContext.CancellationToken);
-
-			// Assert
-			Assert.IsNotNull(response);
-
-			Assert.HasCount(1, _httpMessageHandlerMock.RequestCallbacks);
-
-			var callback = _httpMessageHandlerMock.RequestCallbacks.First();
-			Assert.AreEqual(HttpMethod.Post, callback.HttpMethod);
-			Assert.AreEqual("https://localhost/rest/params/path?test=query+text", callback.Url);
-			Assert.AreEqual(@"{""string"":""Happy Testing"",""integer"":54321}", callback.Content);
-
-			Assert.HasCount(3, callback.Headers);
-			Assert.IsTrue(callback.Headers.ContainsKey("Accept"));
-			Assert.IsTrue(callback.Headers.ContainsKey("Authorization"));
-			Assert.IsTrue(callback.Headers.ContainsKey("User-Agent"));
-
-			Assert.AreEqual("application/json", callback.Headers["Accept"]);
-			Assert.AreEqual("Scheme Parameter", callback.Headers["Authorization"]);
-			Assert.AreEqual("LinkMobilityClient/1.0.0", callback.Headers["User-Agent"]);
-
-			_httpMessageHandlerMock.Mock
-				.Protected()
-				.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
-
-			_clientOptionsMock.VerifyGet(o => o.DefaultQueryParams, Times.Once);
 			VerifyNoOtherCalls();
 		}
 
@@ -227,9 +182,7 @@ namespace LinkMobility.Tests
 			client.Dispose();
 
 			// Assert
-			_httpMessageHandlerMock.Mock
-				.Protected()
-				.Verify("Dispose", Times.Once(), exactParameterMatch: true, true);
+			_httpMessageHandlerMock.Protected.Verify("Dispose", Times.Once(), exactParameterMatch: true, true);
 
 			VerifyNoOtherCalls();
 		}
@@ -245,9 +198,7 @@ namespace LinkMobility.Tests
 			client.Dispose();
 
 			// Assert
-			_httpMessageHandlerMock.Mock
-				.Protected()
-				.Verify("Dispose", Times.Once(), exactParameterMatch: true, true);
+			_httpMessageHandlerMock.Protected.Verify("Dispose", Times.Once(), exactParameterMatch: true, true);
 
 			VerifyNoOtherCalls();
 		}
@@ -320,7 +271,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			await Assert.ThrowsExactlyAsync<ObjectDisposedException>(async () =>
 			{
-				await client.PostAsync<object, TestClass>("/request/path", _request, null, TestContext.CancellationToken);
+				await client.PostAsync<object, TestClass>("/request/path", _request, TestContext.CancellationToken);
 			});
 		}
 
@@ -336,7 +287,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
 			{
-				await client.PostAsync<object, TestClass>(path, _request, null, TestContext.CancellationToken);
+				await client.PostAsync<object, TestClass>(path, _request, TestContext.CancellationToken);
 			});
 		}
 
@@ -349,7 +300,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			await Assert.ThrowsExactlyAsync<ArgumentException>(async () =>
 			{
-				await client.PostAsync<object, TestClass>("foo?bar=baz", _request, null, TestContext.CancellationToken);
+				await client.PostAsync<object, TestClass>("foo?bar=baz", _request, TestContext.CancellationToken);
 			});
 		}
 
@@ -366,7 +317,7 @@ namespace LinkMobility.Tests
 			var client = GetClient();
 
 			// Act
-			var response = await client.PostAsync<TestClass, TestClass>("/request/path", _request, null, TestContext.CancellationToken);
+			var response = await client.PostAsync<TestClass, TestClass>("/request/path", _request, TestContext.CancellationToken);
 
 			// Assert
 			Assert.IsNotNull(response);
@@ -389,9 +340,7 @@ namespace LinkMobility.Tests
 			Assert.AreEqual("Scheme Parameter", callback.Headers["Authorization"]);
 			Assert.AreEqual("LinkMobilityClient/1.0.0", callback.Headers["User-Agent"]);
 
-			_httpMessageHandlerMock.Mock
-				.Protected()
-				.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+			_httpMessageHandlerMock.Protected.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
 
 			_clientOptionsMock.VerifyGet(o => o.DefaultQueryParams, Times.Once);
 			VerifyNoOtherCalls();
@@ -411,7 +360,7 @@ namespace LinkMobility.Tests
 			var client = GetClient();
 
 			// Act
-			var response = await client.PostAsync<TestClass, HttpContent>("/request/path", stringContent, null, TestContext.CancellationToken);
+			var response = await client.PostAsync<TestClass, HttpContent>("/request/path", stringContent, TestContext.CancellationToken);
 
 			// Assert
 			Assert.IsNotNull(response);
@@ -434,9 +383,7 @@ namespace LinkMobility.Tests
 			Assert.AreEqual("Scheme Parameter", callback.Headers["Authorization"]);
 			Assert.AreEqual("LinkMobilityClient/1.0.0", callback.Headers["User-Agent"]);
 
-			_httpMessageHandlerMock.Mock
-				.Protected()
-				.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+			_httpMessageHandlerMock.Protected.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
 
 			_clientOptionsMock.VerifyGet(o => o.DefaultQueryParams, Times.Once);
 			VerifyNoOtherCalls();
@@ -455,7 +402,7 @@ namespace LinkMobility.Tests
 			var client = GetClient();
 
 			// Act
-			var response = await client.PostAsync<TestClass, object>("posting", null, null, TestContext.CancellationToken);
+			var response = await client.PostAsync<TestClass, object>("posting", null, TestContext.CancellationToken);
 
 			// Assert
 			Assert.IsNotNull(response);
@@ -479,9 +426,7 @@ namespace LinkMobility.Tests
 			Assert.AreEqual("Scheme Parameter", callback.Headers["Authorization"]);
 			Assert.AreEqual("LinkMobilityClient/1.0.0", callback.Headers["User-Agent"]);
 
-			_httpMessageHandlerMock.Mock
-				.Protected()
-				.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+			_httpMessageHandlerMock.Protected.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
 		}
 
 		[TestMethod]
@@ -501,7 +446,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			var ex = await Assert.ThrowsExactlyAsync<AuthenticationException>(async () =>
 			{
-				await client.PostAsync<object, TestClass>("foo", _request, null, TestContext.CancellationToken);
+				await client.PostAsync<object, TestClass>("foo", _request, TestContext.CancellationToken);
 			});
 			Assert.IsNull(ex.InnerException);
 			Assert.AreEqual($"HTTP auth missing: {statusCode}", ex.Message);
@@ -524,7 +469,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			var ex = await Assert.ThrowsExactlyAsync<ApplicationException>(async () =>
 			{
-				await client.PostAsync<object, TestClass>("foo", _request, null, TestContext.CancellationToken);
+				await client.PostAsync<object, TestClass>("foo", _request, TestContext.CancellationToken);
 			});
 			Assert.IsNull(ex.InnerException);
 			Assert.AreEqual($"Unknown HTTP response: {statusCode}", ex.Message);
@@ -545,7 +490,7 @@ namespace LinkMobility.Tests
 			// Act & Assert
 			await Assert.ThrowsExactlyAsync<JsonReaderException>(async () =>
 			{
-				await client.PostAsync<TestClass, TestClass>("some-path", _request, null, TestContext.CancellationToken);
+				await client.PostAsync<TestClass, TestClass>("some-path", _request, TestContext.CancellationToken);
 			});
 		}
 
@@ -563,7 +508,7 @@ namespace LinkMobility.Tests
 			var client = GetClient();
 
 			// Act
-			string response = await client.PostAsync<string, TestClass>("path", _request, null, TestContext.CancellationToken);
+			string response = await client.PostAsync<string, TestClass>("path", _request, TestContext.CancellationToken);
 
 			// Assert
 			Assert.IsNotNull(response);
@@ -586,9 +531,7 @@ namespace LinkMobility.Tests
 			Assert.AreEqual("Scheme Parameter", callback.Headers["Authorization"]);
 			Assert.AreEqual("LinkMobilityClient/1.0.0", callback.Headers["User-Agent"]);
 
-			_httpMessageHandlerMock.Mock
-				.Protected()
-				.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+			_httpMessageHandlerMock.Protected.Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
 
 			_clientOptionsMock.VerifyGet(o => o.DefaultQueryParams, Times.Once);
 			VerifyNoOtherCalls();
@@ -637,17 +580,6 @@ namespace LinkMobility.Tests
 
 			[JsonProperty("integer")]
 			public int Int { get; set; }
-		}
-
-		private class TestParams : IQueryParameter
-		{
-			public IReadOnlyDictionary<string, string> GetQueryParameters()
-			{
-				return new Dictionary<string, string>
-				{
-					{ "test", "query text" }
-				};
-			}
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace AMWD.Net.Api.LinkMobility
+namespace AMWD.Net.Api.LinkMobility.Utils
 {
 	internal static class SerializerExtensions
 	{

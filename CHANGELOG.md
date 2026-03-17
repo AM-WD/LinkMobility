@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Channel implementations (SMS, WhatsApp, ...) are extensions to the `ILinkMobilityClient` interface.
+- Reorganized namespaces to reflect parts of the API
+
+### Removed
+
+- `IQueryParameter` as no usage on API docs found (for now)
 
 
 ## [v0.1.1] - 2026-03-13

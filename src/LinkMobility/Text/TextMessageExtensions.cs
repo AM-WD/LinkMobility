@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AMWD.Net.Api.LinkMobility.Utils;
 
-namespace AMWD.Net.Api.LinkMobility
+namespace AMWD.Net.Api.LinkMobility.Text
 {
 	/// <summary>
 	/// Implementation of text messaging (SMS). <see href="https://developer.linkmobility.eu/sms-api/rest-api">API</see>

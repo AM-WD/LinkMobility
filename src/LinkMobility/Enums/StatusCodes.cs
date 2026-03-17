@@ -1,7 +1,8 @@
 ﻿namespace AMWD.Net.Api.LinkMobility
 {
 	/// <summary>
-	/// Custom status codes as defined by <see href="https://developer.linkmobility.eu/sms-api/rest-api#section/Status-codes">Link Mobility</see>.
+	/// Custom status codes as defined by
+	/// <see href="https://developer.linkmobility.eu/sms-api/rest-api#section/Status-codes">LINK Mobility</see>.
 	/// </summary>
 	public enum StatusCodes : int
 	{

@@ -7,6 +7,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AMWD.Net.Api.LinkMobility.Utils;
 
 namespace AMWD.Net.Api.LinkMobility
 {
@@ -79,12 +80,12 @@ namespace AMWD.Net.Api.LinkMobility
 		}
 
 		/// <inheritdoc/>
-		public async Task<TResponse> PostAsync<TResponse, TRequest>(string requestPath, TRequest? request, IQueryParameter? queryParams = null, CancellationToken cancellationToken = default)
+		public async Task<TResponse> PostAsync<TResponse, TRequest>(string requestPath, TRequest? request, CancellationToken cancellationToken = default)
 		{
 			ThrowIfDisposed();
 			ValidateRequestPath(requestPath);
 
-			string requestUrl = BuildRequestUrl(requestPath, queryParams);
+			string requestUrl = BuildRequestUrl(requestPath);
 			var httpContent = ConvertRequest(request);
 
 			var httpRequest = new HttpRequestMessage
@@ -99,7 +100,7 @@ namespace AMWD.Net.Api.LinkMobility
 			return response;
 		}
 
-		private string BuildRequestUrl(string requestPath, IQueryParameter? queryParams = null)
+		private string BuildRequestUrl(string requestPath)
 		{
 			string path = requestPath.Trim().TrimStart('/');
 			var param = new Dictionary<string, string>();
@@ -107,13 +108,6 @@ namespace AMWD.Net.Api.LinkMobility
 			if (_clientOptions.DefaultQueryParams.Count > 0)
 			{
 				foreach (var kvp in _clientOptions.DefaultQueryParams)
-					param[kvp.Key] = kvp.Value;
-			}
-
-			var customQueryParams = queryParams?.GetQueryParameters();
-			if (customQueryParams?.Count > 0)
-			{
-				foreach (var kvp in customQueryParams)
 					param[kvp.Key] = kvp.Value;
 			}
 
