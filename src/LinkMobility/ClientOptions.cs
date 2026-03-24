@@ -8,13 +8,19 @@ namespace AMWD.Net.Api.LinkMobility
 	public class ClientOptions
 	{
 		/// <summary>
-		/// Gets or sets the default base url for the API.
+		/// Gets or sets the base url for the API.
 		/// </summary>
+		/// <remarks>
+		/// The default base url is <c>https://api.linkmobility.eu/rest/</c>.
+		/// </remarks>
 		public virtual string BaseUrl { get; set; } = "https://api.linkmobility.eu/rest/";
 
 		/// <summary>
 		/// Gets or sets the default timeout for the API.
 		/// </summary>
+		/// <remarks>
+		/// The default timeout is <c>100</c> seconds.
+		/// </remarks>
 		public virtual TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(100);
 
 		/// <summary>
@@ -28,7 +34,7 @@ namespace AMWD.Net.Api.LinkMobility
 		public virtual IDictionary<string, string> DefaultQueryParams { get; set; } = new Dictionary<string, string>();
 
 		/// <summary>
-		/// Gets or sets a value indicating whether to allow redirects.
+		/// Gets or sets a value indicating whether to follow redirects from the server.
 		/// </summary>
 		public virtual bool AllowRedirects { get; set; }
 

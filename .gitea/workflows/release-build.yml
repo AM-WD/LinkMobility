@@ -30,10 +30,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Restore tools
+      - name: Prepare environment
         run: |
           set -ex
-          dotnet tool restore -v q
           dotnet tool install dotnet-reportgenerator-globaltool --tool-path /dotnet-tools
           dotnet tool install docfx --tool-path /dotnet-tools
           echo "CI_SERVER_HOST=${GITEA_SERVER_URL#https://}" >> "$GITEA_ENV"

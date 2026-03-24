@@ -9,7 +9,7 @@ namespace AMWD.Net.Api.LinkMobility
 	public interface ILinkMobilityClient
 	{
 		/// <summary>
-		/// Performs a POST request to the LINK mobility API.
+		/// Performs a POST request to the LINK Mobility API.
 		/// </summary>
 		/// <typeparam name="TResponse">The type of the response.</typeparam>
 		/// <typeparam name="TRequest">The type of the request.</typeparam>

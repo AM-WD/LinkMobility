@@ -27,7 +27,7 @@ namespace AMWD.Net.Api.LinkMobility
 		/// <param name="username">The username used for basic authentication.</param>
 		/// <param name="password">The password used for basic authentication.</param>
 		/// <param name="clientOptions">Optional configuration settings for the client.</param>
-		/// <param name="httpClient">Optional <see cref="HttpClient"/> instance if you want a custom <see cref="HttpMessageHandler"/> implemented.</param>
+		/// <param name="httpClient">Optional <see cref="HttpClient"/> instance if you want a custom implementation.</param>
 		public LinkMobilityClient(string username, string password, ClientOptions? clientOptions = null, HttpClient? httpClient = null)
 			: this(new BasicAuthentication(username, password), clientOptions, httpClient)
 		{
@@ -38,7 +38,7 @@ namespace AMWD.Net.Api.LinkMobility
 		/// </summary>
 		/// <param name="token">The bearer token used for authentication.</param>
 		/// <param name="clientOptions">Optional configuration settings for the client.</param>
-		/// <param name="httpClient">Optional <see cref="HttpClient"/> instance if you want a custom <see cref="HttpMessageHandler"/> implemented.</param>
+		/// <param name="httpClient">Optional <see cref="HttpClient"/> instance if you want a custom implementation.</param>
 		public LinkMobilityClient(string token, ClientOptions? clientOptions = null, HttpClient? httpClient = null)
 			: this(new AccessTokenAuthentication(token), clientOptions, httpClient)
 		{
@@ -50,7 +50,7 @@ namespace AMWD.Net.Api.LinkMobility
 		/// </summary>
 		/// <param name="authentication">The authentication mechanism used to authorize requests.</param>
 		/// <param name="clientOptions">Optional client configuration settings.</param>
-		/// <param name="httpClient">Optional <see cref="HttpClient"/> instance if you want a custom <see cref="HttpMessageHandler"/> implemented.</param>
+		/// <param name="httpClient">Optional <see cref="HttpClient"/> instance if you want a custom implementation.</param>
 		public LinkMobilityClient(IAuthentication authentication, ClientOptions? clientOptions = null, HttpClient? httpClient = null)
 		{
 			if (authentication == null)
@@ -66,7 +66,8 @@ namespace AMWD.Net.Api.LinkMobility
 		}
 
 		/// <summary>
-		/// Disposes of the resources used by the <see cref="LinkMobilityClient"/> object.
+		/// Disposes all resources used by the <see cref="LinkMobilityClient"/> object.
+		/// This includes the <see cref="HttpClient"/> whether it was injected or created internally.
 		/// </summary>
 		public void Dispose()
 		{
