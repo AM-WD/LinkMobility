@@ -12,7 +12,7 @@ In this project the REST API of LINK Mobility will be implemented.
 
 ---
 
-Published under MIT License (see [**tl;dr**Legal])
+Published under MIT License (see [choose a license])
 
 [LINK Mobility REST API]: https://developer.linkmobility.eu/
-[**tl;dr**Legal]: https://www.tldrlegal.com/license/mit-license
+[choose a license]: https://choosealicense.com/licenses/mit/
