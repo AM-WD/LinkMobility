@@ -7,17 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+_no changes yet_
+
+
+## [v0.2.0] - 2026-03-24
+
 ### Added
 
-- `Validation` utility class for specifications as MSISDN
+- `Validation` utility class for specifications as [MSISDN](https://en.wikipedia.org/wiki/MSISDN)
 - Docs rendering using DocFX
 - `Personal` as enum value for `ContentCategory`
 - WhatsApp support for
-  - `AudioMessageContent`
-  - `DocumentMessageContent`
-  - `ImageMessageContent`
-  - `TextMessageContent`
-  - `VideoMessageContent`
+  - `Audio`
+  - `Document`
+  - `Image`
+  - `Text`
+  - `Video`
 
 ### Changed
 
@@ -55,7 +60,8 @@ _Initial release, SMS only._
 
 
 
-[Unreleased]: https://github.com/AM-WD/LinkMobility/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/AM-WD/LinkMobility/compare/v0.2.0...HEAD
 
+[v0.2.0]: https://github.com/AM-WD/LinkMobility/compare/v0.1.1...v0.2.0
 [v0.1.1]: https://github.com/AM-WD/LinkMobility/compare/v0.1.0...v0.1.1
 [v0.1.0]: https://github.com/AM-WD/LinkMobility/commits/v0.1.0

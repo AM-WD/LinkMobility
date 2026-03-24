@@ -27,12 +27,18 @@
 		/// <summary>
 		/// The messages involved in the notification change.
 		/// </summary>
+		/// <remarks>
+		/// LINK Mobility API docs: <see href="https://developer.linkmobility.eu/whatsapp-api/rest-api#/paths/receiveIncomingWhatsappmessaging/post"/>
+		/// </remarks>
 		[JsonProperty("messages")]
 		public IReadOnlyCollection<Message>? Messages { get; set; }
 
 		/// <summary>
 		/// Status changes of the messages involved in the notification change.
 		/// </summary>
+		/// <remarks>
+		/// LINK Mobility API docs: <see href="https://developer.linkmobility.eu/whatsapp-api/rest-api#/paths/receiveStatusWhatsappmessaging/post"/>
+		/// </remarks>
 		[JsonProperty("statuses")]
 		public IReadOnlyCollection<Status>? Statuses { get; set; }
 	}
