@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `Validation` utility class for specifications as MSISDN
 - Docs rendering using DocFX
+- `Personal` as enum value for `ContentCategory`
+- WhatsApp support for
+  - `AudioMessageContent`
+  - `DocumentMessageContent`
+  - `ImageMessageContent`
+  - `TextMessageContent`
+  - `VideoMessageContent`
 
 ### Changed
 

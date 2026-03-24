@@ -20,5 +20,11 @@ namespace AMWD.Net.Api.LinkMobility
 		/// </summary>
 		[EnumMember(Value = "advertisement")]
 		Advertisement = 2,
+
+		/// <summary>
+		/// Represents content that is classified as a personal message.
+		/// </summary>
+		[EnumMember(Value = "personal")]
+		Personal = 3,
 	}
 }

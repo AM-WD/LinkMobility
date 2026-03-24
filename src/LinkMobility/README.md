@@ -9,6 +9,7 @@ LINK Mobility is a provider for communication with customers via SMS, RCS or Wha
 In this project the REST API of LINK Mobility will be implemented.
 
 - [SMS API](https://developer.linkmobility.eu/sms-api/rest-api)
+- [WhatsApp API](https://developer.linkmobility.eu/whatsapp-api/rest-api) (partial, see Changelog)
 
 ---
 
